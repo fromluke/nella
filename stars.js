@@ -1,8 +1,6 @@
 $(document).ready(function () {
-  setTimeout(() => {
-    $("#canvas").css("display", "block");
-    animateStars();
-  }, "200");
+  var canvas = document.getElementById("canvas");
+  var context = canvas.getContext("2d");
 
   function Star(x, y, r, color) {
     this.x = x;
@@ -30,24 +28,22 @@ $(document).ready(function () {
     },
   };
 
-  var canvas = document.getElementById("canvas");
-  var context = canvas.getContext("2d");
-
-  var C_WIDTH = (canvas.width = window.innerWidth);
-  var C_HEIGHT = (canvas.height = window.innerHeight);
+  var arrStars = [];
 
   function randomColor() {
     var arrColors = ["D5C6B3", "DEDEDE", "BB9A81"];
     return "#" + arrColors[Math.floor(Math.random() * 3)];
   }
 
-  var arrStars = [];
-  for (i = 0; i < 200; i++) {
-    var randX = Math.floor(Math.random() * C_WIDTH + 1);
-    var randY = Math.floor(Math.random() * C_HEIGHT + 1);
-    var randR = Math.random() * 1.7 + 0.5;
-    var star = new Star(randX, randY, randR, randomColor());
-    arrStars.push(star);
+  function createStars() {
+    arrStars = [];
+    for (i = 0; i < 200; i++) {
+      var randX = Math.floor(Math.random() * canvas.width + 1);
+      var randY = Math.floor(Math.random() * canvas.height + 1);
+      var randR = Math.random() * 1.7 + 0.5;
+      var star = new Star(randX, randY, randR, randomColor());
+      arrStars.push(star);
+    }
   }
 
   function update() {
@@ -58,10 +54,33 @@ $(document).ready(function () {
 
   function animateStars() {
     update();
-    context.clearRect(0, 0, C_WIDTH, C_HEIGHT);
+    context.clearRect(0, 0, canvas.width, canvas.height);
     for (var i = 0; i < arrStars.length; i++) {
       arrStars[i].render();
     }
     requestAnimationFrame(animateStars);
+  }
+
+  // Initial setup
+  setTimeout(() => {
+    $("#canvas").css("display", "block");
+    updateCanvasSize();
+    createStars();
+    animateStars();
+  }, "200");
+
+  // Resize event listener
+  var t;
+  window.addEventListener("resize", function () {
+    clearTimeout(t);
+    t = setTimeout(function () {
+      updateCanvasSize();
+      createStars();
+    }, 100);
+  });
+
+  function updateCanvasSize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
   }
 });
