@@ -48,7 +48,6 @@ $(document).ready(function () {
   };
 
   var arrStars = [];
-
   function randomColor() {
     var arrColors = ["D5C6B3", "DEDEDE", "BB9A81"];
     return "#" + arrColors[Math.floor(Math.random() * 3)];
