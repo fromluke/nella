@@ -5,7 +5,7 @@ $(document).ready(function () {
     var context = canvas.getContext("2d");
     // Initial setup
     setTimeout(() => {
-      canvas.css("display", "block");
+      canvas.style.display = "block";
       updateCanvasSize();
       createStars();
       animateStars();
