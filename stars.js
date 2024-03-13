@@ -1,6 +1,25 @@
 $(document).ready(function () {
   var canvas = document.getElementById("canvas");
-  var context = canvas.getContext("2d");
+
+  if (canvas) {
+    var context = canvas.getContext("2d");
+    // Initial setup
+    setTimeout(() => {
+      canvas.css("display", "block");
+      updateCanvasSize();
+      createStars();
+      animateStars();
+    }, "200");
+    // On resize
+    var t;
+    window.addEventListener("resize", function () {
+      clearTimeout(t);
+      t = setTimeout(function () {
+        updateCanvasSize();
+        createStars();
+      }, 100);
+    });
+  }
 
   function Star(x, y, r, color) {
     this.x = x;
@@ -37,7 +56,8 @@ $(document).ready(function () {
 
   function createStars() {
     arrStars = [];
-    for (i = 0; i < 200; i++) {
+    var numStars = window.innerWidth < 1000 ? 100 : 200;
+    for (i = 0; i < numStars; i++) {
       var randX = Math.floor(Math.random() * canvas.width + 1);
       var randY = Math.floor(Math.random() * canvas.height + 1);
       var randR = Math.random() * 1.7 + 0.5;
@@ -60,24 +80,6 @@ $(document).ready(function () {
     }
     requestAnimationFrame(animateStars);
   }
-
-  // Initial setup
-  setTimeout(() => {
-    $("#canvas").css("display", "block");
-    updateCanvasSize();
-    createStars();
-    animateStars();
-  }, "200");
-
-  // Resize event listener
-  var t;
-  window.addEventListener("resize", function () {
-    clearTimeout(t);
-    t = setTimeout(function () {
-      updateCanvasSize();
-      createStars();
-    }, 100);
-  });
 
   function updateCanvasSize() {
     canvas.width = window.innerWidth;
